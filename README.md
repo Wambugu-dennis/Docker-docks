@@ -8,9 +8,9 @@ Docker containers basics and the network infrastructure explained
 
    - SETUP AND COMMANDS:
    ***assuming you have the docker engine allready installed*** 
-          #sudo apt-get install docker.io
+                #sudo apt-get install docker.io
     - losting the current docker networks
-          #sudo docker network ls
+                #sudo docker network ls
      yields: bridge, host & none as the available networks and their networks types/driver as bridge, host, null resepectively.
           
    # CREATING the NETWORKS
