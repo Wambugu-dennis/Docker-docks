@@ -6,10 +6,10 @@ Docker containers basics and the network infrastructure explained
 - so we have hadware --> os(eg: ubuntu, kali) --> Docker engine --> containers(which can be runnign different OS's (ubuntu, centos, debian)
 
 
-   SETUP AND COMMANDS:
+   - SETUP AND COMMANDS:
    ***assuming you have the docker engine allready installed*** 
             sudo apt-get install docker.io
-    --losting the current docker networks
+    - losting the current docker networks
             sudo docker network ls
      yields: bridge, host & none as the available networks and their networks types/driver as bridge, host, null resepectively.
           
@@ -18,17 +18,17 @@ Docker containers basics and the network infrastructure explained
   # Network 1 -- bridge0  (default)
         
 - Pull image for container (centos)
-         # docker pull centos
+                docker pull centos
     
 - run the container
-         # sudio docker run -itd --name mycentoscon centos
+                sudo docker run -itd --name mycentoscon centos
     **you can use the switch --rm before -name to clean after use if it a lab
 - to see if the container is running
-         # docker ps (lists all running containers)
+                docker ps (lists all running containers)
     
 - navigate to the container
-         # docker exec -it mycentoscon bash  
-         # exit to exit the container
+                docker exec -it mycentoscon bash  
+                exit to exit the container
     
 - when the container are deployed, docker automatically throws the containers into the bridge. By default docker creates an ethernet virtual(veth) interface for each and connects it to the docker zero bridge whicj kind of acts as a switch. Additionally there is a virtual ethernet interface(eth0) for each container so that each cotainer (eth0) connects to its corresponding (veth) that is automatically connected to the docker0 bridge (acting as a switch).
 -  to verify that this is true, run
