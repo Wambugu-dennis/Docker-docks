@@ -106,9 +106,10 @@ Docker containers basics and the network infrastructure explained
          - first we need to stop running that container, run;
             #sudo docker stop webcon
     
-      # steps:
-         - we first define our new container and define our network
-         - we wont expose any ports for now but we will keep the same container name webcon
+      #steps:
+      
+       -we first define our new container and define our network
+       -we wont expose any ports for now but we will keep the same container name webcon
              #sudo docker run -itd -rm --network host --name webcon nginx
     
       -this now does results into a very interesting container with intersting network configuration
@@ -131,10 +132,11 @@ Docker containers basics and the network infrastructure explained
              > --gateway 10.2.1.3 \
              > -o parent=denno3 \ (here we are trying to tie our macvlan network to the host network interface
              > dennohmcvln
+             
       
-        - checking whether this network has been created, run:
+     -checking whether this network has been created, run:
              #sudo docker network ls
-        -this shows the new macvlan just created (dennohmcvln) and the driver/network type macvlan
+     -this shows the new macvlan just created (dennohmcvln) and the driver/network type macvlan
        
 - remember the two contanainers we created in the user defined network 2 (cont21 and cont22), we want to deploy them into the macvlan network
       # steps:
