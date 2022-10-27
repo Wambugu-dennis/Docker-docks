@@ -10,11 +10,11 @@ Docker containers basics and the network infrastructure explained
   
   ***assuming you have the docker engine allready installed*** 
    
-                #sudo apt-get install docker.io
+                sudo apt-get install docker.io
                 
     -losting the current docker network
       
-               #sudo docker network ls
+               sudo docker network ls
                 
     -yields: bridge, host & none as the available networks and their networks types/driver as bridge, host, null resepectively.
           
@@ -24,51 +24,51 @@ Docker containers basics and the network infrastructure explained
         
 - Pull image for container (centos)
 - 
-                #docker pull centos
+                docker pull centos
     
 - run the container
-                #sudo docker run -itd --name mycentoscon centos
+                sudo docker run -itd --name mycentoscon centos
                 
     **you can use the switch --rm before -name to clean after use if it a lab
 - to see if the container is running
 - 
-                #docker ps (lists all running containers)
+                docker ps (lists all running containers)
     
 - navigate to the container
 - 
-                #docker exec -it mycentoscon bash  
-                #exit to exit the container
+                docker exec -it mycentoscon bash  
+                exit to exit the container
     
 - when the container are deployed, docker automatically throws the containers into the bridge. By default docker creates an ethernet virtual(veth) interface for each and connects it to the docker zero bridge which kind of acts as a switch. Additionally there is a virtual ethernet interface(eth0) for each container so that each cotainer (eth0) connects to its corresponding (veth) that is automatically connected to the docker0 bridge (acting as a switch).
 -  to verify that this is true, run
 -  
-                #ip address show
+                ip address show
                 
     -the respective interfaces are now listed
     -to assertain that they are linked to the bridge, run
     
-                #bridge link
+                bridge link
                 
     -this will list the interfaces and show that they are connected to docker zero.
     
 - Important to note is that the bridge also assigns ip addresses meaning it  runs DHCP
   - to verify this, run an inspection on the network using
   - 
-                #sudo docker inspect bridge
+                sudo docker inspect bridge
                 
   -this returns/lists the available containers and their respective ipv4 addresses & their macAddresses in the same docker0 network(subnet if you like).
   -like every other network, it has DNS by taking the /etc/resolv.conf file from the host (docker0) and putting it on the container so essentilaly they are using the same DNS. 
   -Remember the docker0 acts as a switch, this inturn means that the containers can communicate to each other and the internet as well
   - to verify this, jump into a container
   - 
-                #sudo docker exec -it mycentoscon -sh  (takes us to the centos container)
-                #ping 172.18.0.3(some other container in the same network)
+                sudo docker exec -it mycentoscon -sh  (takes us to the centos container)
+                ping 172.18.0.3(some other container in the same network)
                 
        -the ping works for inter container comms and the internet        
        -why it works for the internet...
        -lets start with getting the ip route in the container by running
        
-                #ip route  
+                ip route  
          
       -this returns the a default route via gateway of docker0
       -so how does docker0 connect the container to the internet?
@@ -80,7 +80,7 @@ Docker containers basics and the network infrastructure explained
        -how its done:
        -note that this has to be done when deploying the container
        
-                #sudo docker run -itd --rm -p 80:80 --name webcon nginx
+                sudo docker run -itd --rm -p 80:80 --name webcon nginx
                 
        -80:80 means that exposes port 80 and matches it to the host port 80 so now its reachable
        -running sudo docker ps shows what ports are being exposed.
@@ -92,33 +92,33 @@ Docker containers basics and the network infrastructure explained
        
     -creating the network:
     
-                #sudo docker network create netwk2
+                sudo docker network create netwk2
                 
     -to see if the network exists run
     
-                #ip address show
+                ip address show
                 
         -this will show the new network virtual bridge created (netwk2) with a new ip different from bridge0
      - to list the networks we run
      - 
-                 #sudo docker network ls
+                 sudo docker network ls
      
 - creating a new container inside the network, remember this time a few details have to be specified like the network name
 - 
-                #sudo docker run -itd --rm --network netwk2 --name mycont2 ubuntu
+                sudo docker run -itd --rm --network netwk2 --name mycont2 ubuntu
          
      ***you can add another container if you like***
     -checking if the virtual interfaces were created, run;
     
-                #ip address show
+                ip address show
          
     -checking the connection of the new intrfaces created and verify they are tied to the bridge, run;
     
-                #bridge link
+                bridge link
                 
     -inspecting the network, run;
     
-                 #sudo docker inspect network2
+                sudo docker inspect network2
                  
     - the created containers are displayed with their respective names, macAddresses and ipv4 addresses in the related to the network.
     
@@ -128,8 +128,8 @@ Docker containers basics and the network infrastructure explained
     eg; say for instance we have to containers in network two cont21 and cont22
         these two can ping each other by name within that network BY NAME
         
-                #sudo docker exec -it cont21
-                #ping cont22
+                sudo docker exec -it cont21
+                ping cont22
         
 
 
@@ -139,14 +139,14 @@ Docker containers basics and the network infrastructure explained
   - remember the weserver (webcon) in the first network we had, we want to redeploy that in a host newtwork
          - first we need to stop running that container, run;
          
-                #sudo docker stop webcon
+                sudo docker stop webcon
     
       #steps:
       
        -we first define our new container and define our network
        -we wont expose any ports for now but we will keep the same container name webcon
        
-                #sudo docker run -itd -rm --network host --name webcon nginx
+                sudo docker run -itd -rm --network host --name webcon nginx
     
       -this now does results into a very interesting container with intersting network configuration
       -the container is now deployed and hooked to the host network directly
@@ -163,16 +163,16 @@ Docker containers basics and the network infrastructure explained
    
      #steps to createing our first mac vlan
      
-             # sudo docker network create -d macvlan \
-             > --subnet 10.2.1.0/24 \
-             > --gateway 10.2.1.3 \
-             > -o parent=denno3 \ (here we are trying to tie our macvlan network to the host network interface
-             > dennohmcvln
+                sudo docker network create -d macvlan \
+                --subnet 10.2.1.0/24 \
+                --gateway 10.2.1.3 \
+                -o parent=denno3 \ (here we are trying to tie our macvlan network to the host network interface)
+                dennohmcvln
              
       
      -checking whether this network has been created, run:
      
-             #sudo docker network ls
+                sudo docker network ls
              
      -this shows the new macvlan just created (dennohmcvln) and the driver/network type macvlan
        
@@ -182,14 +182,14 @@ Docker containers basics and the network infrastructure explained
       
     - first we need to stop them
     - 
-                #sudo docker stop cont21 cont22
+                 sudo docker stop cont21 cont22
             
     - deploying then on the new macvlan network (dennohmcvln)
     (specify and assign ip addresses manually, make sure its not being used in your network and is outside your DHCP range)
     
-                #sudo docker run -itd --rm --network dennohmcvln \
-                > --ip 10.8.1.25 \
-                > --name cont21 ubuntu
+                 sudo docker run -itd --rm --network dennohmcvln \
+                 --ip 10.8.1.25 \
+                 --name cont21 ubuntu
          
          - now container cont21 is connected to the network like a regular vm 
          downside of macvlan:
