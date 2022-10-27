@@ -123,8 +123,8 @@ Docker containers basics and the network infrastructure explained
      -remember all the networks we have covored so far; what if we could do away we all that jagon of isolated networks, sepaaration, virtual ethernets and all, aaannnd connect the container directly to a physical network.
      -thats a mac vlan network in docker.
      -if a container is connected via a mac vlan, itd be as is the container is directly connected to a switch, have its own ip address and even a mac address through their own virtual ethernet interfaces.
-     
-             #steps to createing our first mac vlan
+   
+     #steps to createing our first mac vlan
      
              # sudo docker network create -d macvlan \
              > --subnet 10.2.1.0/24 \
