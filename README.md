@@ -135,15 +135,22 @@ Docker containers basics and the network infrastructure explained
              
       
      -checking whether this network has been created, run:
+     
              #sudo docker network ls
+             
      -this shows the new macvlan just created (dennohmcvln) and the driver/network type macvlan
        
 - remember the two contanainers we created in the user defined network 2 (cont21 and cont22), we want to deploy them into the macvlan network
+- 
       # steps:
+      
     - first we need to stop them
+    - 
             #sudo docker stop cont21 cont22
+            
     - deploying then on the new macvlan network (dennohmcvln)
     (specify and assign ip addresses manually, make sure its not being used in your network and is outside your DHCP range)
+    
             #sudo docker run -itd --rm --network dennohmcvln \
             > --ip 10.8.1.25 \
             > --name cont21 ubuntu
