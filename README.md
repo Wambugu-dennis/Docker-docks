@@ -18,35 +18,35 @@ Docker containers basics and the network infrastructure explained
   # Network 1 -- bridge0  (default)
         
 - Pull image for container (centos)
-          #docker pull centos
+                #docker pull centos
     
 - run the container
-          #sudo docker run -itd --name mycentoscon centos
+                #sudo docker run -itd --name mycentoscon centos
     **you can use the switch --rm before -name to clean after use if it a lab
 - to see if the container is running
-          #docker ps (lists all running containers)
+                #docker ps (lists all running containers)
     
 - navigate to the container
-          #docker exec -it mycentoscon bash  
-          #exit to exit the container
+                #docker exec -it mycentoscon bash  
+                #exit to exit the container
     
 - when the container are deployed, docker automatically throws the containers into the bridge. By default docker creates an ethernet virtual(veth) interface for each and connects it to the docker zero bridge which kind of acts as a switch. Additionally there is a virtual ethernet interface(eth0) for each container so that each cotainer (eth0) connects to its corresponding (veth) that is automatically connected to the docker0 bridge (acting as a switch).
 -  to verify that this is true, run
-         #ip address show
+                #ip address show
     -the respective interfaces are now listed
     -to assertain that they are linked to the bridge, run
-         #bridge link
+                #bridge link
     -this will list the interfaces and show that they are connected to docker zero.
     
 - Important to note is that the bridge also assigns ip addresses meaning it  runs DHCP
   - to verify this, run an inspection on the network using
-         #sudo docker inspect bridge
+                #sudo docker inspect bridge
   -this returns/lists the available containers and their respective ipv4 addresses & their macAddresses in the same docker0 network(subnet if you like).
   -like every other network, it has DNS by taking the /etc/resolv.conf file from the host (docker0) and putting it on the container so essentilaly they are using the same DNS. 
   -Remember the docker0 acts as a switch, this inturn means that the containers can communicate to each other and the internet as well
   - to verify this, jump into a container
-         #sudo docker exec -it mycentoscon -sh  (takes us to the centos container)
-         #ping 172.18.0.3(some other container in the same network)
+                #sudo docker exec -it mycentoscon -sh  (takes us to the centos container)
+                #ping 172.18.0.3(some other container in the same network)
         -the ping works for inter container comms and the internet
         
        -why it works for the internet...
