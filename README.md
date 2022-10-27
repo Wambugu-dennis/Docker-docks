@@ -6,12 +6,12 @@ Docker containers basics and the network infrastructure explained
 - so we have hadware --> os(eg: ubuntu, kali) --> Docker engine --> containers(which can be runnign different OS's (ubuntu, centos, debian)
 
 
-   #SETUP AND COMMANDS:
+   SETUP AND COMMANDS:
    ***assuming you have the docker engine allready installed*** 
-     # sudo apt-get install docker.io
+            sudo apt-get install docker.io
     --losting the current docker networks
-     # sudo docker network ls
-          yields: bridge, host & none as the available networks and their networks types/driver as bridge, host, null resepectively.
+            sudo docker network ls
+     yields: bridge, host & none as the available networks and their networks types/driver as bridge, host, null resepectively.
           
    # CREATING the NETWORKS
    
