@@ -127,28 +127,27 @@ Docker containers basics and the network infrastructure explained
      # Network 3 -- the Host
   -  its one of the default networks that was already there.
   - remember the weserver (webcon) in the first network we had, we want to redeploy that in a host newtwork
-        - first we need to stop running that container, run;
+   - first we need to stop running that container, run;
                       
 		      sudo docker stop webcon
-        - steps:
-        - we first define our new container and define our network
-        - we wont expose any ports for now but we will keep the same container name webcon
+    - steps:
+     - we first define our new container and define our network
+     - we wont expose any ports for now but we will keep the same container name webcon
                       
 		      sudo docker run -itd -rm --network host --name webcon nginx
 		      
-      - this now does results into a very interesting container with intersting network configuration
-      - the container is now deployed and hooked to the host network directly
-      - when you deploy a container to the host newtork, that container completely bumps off the host by sharing the same ports and ip address
-      - this container runs as an application with no isolation.
+   - this now does results into a very interesting container with intersting network configuration
+   - the container is now deployed and hooked to the host network directly
+   - when you deploy a container to the host newtork, that container completely bumps off the host by sharing the same ports and ip address
+   - this container runs as an application with no isolation.
 
    # Network 4 -- the mac vlan
 
 - this is a very interesting network in docker.
      - remember all the networks we have covored so far; what if we could do away we all that jagon of isolated networks, sepaaration, virtual ethernets and all, aaannnd connect the container directly to a physical network.
      - thats a mac vlan network in docker.
-     - if a container is connected via a mac vlan, itd be as is the container is directly connected to a switch, have its own ip address and even a mac address through their own virtual ethernet interfaces.
-	 
-          steps to createing our first mac vlan:
+     - if a container is connected via a mac vlan, itd be as is the container is directly connected to a switch, have its own ip address and even a mac address through their own virtual ethernet interfaces.	 
+       steps to createing our first mac vlan:
 	  
                         sudo docker network create -d macvlan \
                         --subnet 10.2.1.0/24 \
@@ -163,10 +162,11 @@ Docker containers basics and the network infrastructure explained
      - this shows the new macvlan just created (dennohmcvln) and the driver/network type macvlan
 
 - remember the two contanainers we created in the user defined network 2 (cont21 and cont22), we want to deploy them into the macvlan network
-
     steps:
     - first we need to stop them
+    
                      sudo docker stop cont21 cont22
+		     
     - deploying then on the new macvlan network (dennohmcvln)
     (specify and assign ip addresses manually, make sure its not being used in your network and is outside your DHCP range)
     
@@ -183,19 +183,19 @@ Docker containers basics and the network infrastructure explained
        - no DHCP as is usual with connecting devices directly to your home network.
        - if you dont specify ip addresses for your containers in macvlan network docker chooses one for you using its own DNCP server and assign the way it does with bridge network.
        - the best trick here is to assisgma ip range the docker host should use to assign the containers
-           eg: 
+       eg: 
 	   
-	   	sudo docker network create -d macvlan --subnet 192.168.0.0/24 --gateway 192.168.0.1 --ip-range (limit is a single ip) not very useful
+	   	    sudo docker network create -d macvlan --subnet 192.168.0.0/24 --gateway 192.168.0.1 --ip-range (limit is a single ip) not very useful
 
-          steps for enabling promiscoius mode
-           - start with the host
+      steps for enabling promiscoius mode
+      - start with the host
           
-                sudo ip link set denno3  promisc on
+                    sudo ip link set denno3  promisc on
 		   
-           - next is to enable promisc mode on on every container, yes very redundant
-             - assuming youre on a vm (say oracal virtual box which i used for this lab) head to settings, network promiscous mode set to allow all
-             - however, this might still not work on the first trial so reboot the host, repeat the step form ip link and try pinging the gateway ip from a container, that should work.
+       - next is to enable promisc mode on on every container, yes very redundant
+       - assuming youre on a vm (say oracal virtual box which i used for this lab) head to settings, network promiscous mode set to allow all
+       - however, this might still not work on the first trial so reboot the host, repeat the step form ip link and try pinging the gateway ip from a container, that should work.
 
-   - Macvlan has two modes:
+ - Macvlan has two modes:
        1. Acts as a bridge network(one we just covered) except it connects to your network
        2. Has an 802.1q mode
