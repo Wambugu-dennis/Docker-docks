@@ -192,10 +192,64 @@ Docker containers basics and the network infrastructure explained
           
                     sudo ip link set denno3  promisc on
 		   
-       - next is to enable promisc mode on on every container, yes very redundant
-       - assuming youre on a vm (say oracal virtual box which i used for this lab) head to settings, network promiscous mode set to allow all
-       - however, this might still not work on the first trial so reboot the host, repeat the step form ip link and try pinging the gateway ip from a container, that should work.
+      - next is to enable promisc mode on on every container, yes very redundant
+      - assuming youre on a vm (say oracal virtual box which i used for this lab) head to settings, network promiscous mode set to allow all
+      - however, this might still not work on the first trial so reboot the host, repeat the step form ip link and try pinging the gateway ip from a container, that should work.
 
  - Macvlan has two modes:
        1. Acts as a bridge network(one we just covered) except it connects to your network
        2. Has an 802.1q mode
+- this mode allows connecting the containers directly to your network as well as;
+    - allows specifying the sub interface eg: eth0.30, etho.40 which enables docker to automatically create sub interfaces and sends the individual (vlans) over a link like a truck from the container to the sub interface created by docker.
+        - creating our new macvlan with version/mode 2
+                    sudo docker network create -d macvlan --subnet 192.168.15.0/24 --gateway 192.168.15.0 -o parent=denno3.20 dennohmcvlan2
+        - to check if the network exixts
+                    ip add show
+                    
+    # Network 5 - IPvlan
+    - this network solves the issues with macvlan that requires enabling promisc modes and all.
+    - it has two modes
+          - L2 and L3
+    - this network additionally allows the containers to share the MacAddress with the host but retain their ip addresses on the network; this is how the setting up of promisc mode is eleiminated.
+                L2 mmode:
+          - steps to setting up this network:
+          
+                        sudo docker network create -d ipvlan --subnet 10.10.1.0/24 --gateway 10.10.1.3 -o parent=denno3 newdennnohipvln
+		     
+          - adding the container to this ipvlan network
+                     
+		       sudo docker run -itd --rm --network newdennohipvln -ip 10.10.1.72 --name ipcont ubuntu
+        
+                L3 mode:
+          - l3 means we are done dealing with layer 2 operations that involve mac addresses and switches and now the containers only care about layer 3 operation concerned with ip addresses.
+          - l3 mode containers connect to the host like its a router(layer 3 connections)
+          - this eliminates broadcast traffic from the network
+          - notice while creating a network in this mode, you dont specify the gateway since the network connects to the host as a router
+                       
+		       sudo docker network create -d ipvlan --subnet 192.168.100.0/24 -o parent=denno3 -o ipvlan_mode=l3 --subnet 192.168.90.0/24 netwkipvln1
+                       
+          - creating new containers inside the network 1 
+                       sudo docker run -itd --rm --network netwkipvlan1 --ip 192.168.100.10 --name ipvcont11 ubuntu
+                       sudo docker run -itd --rm --network netwkipvlan1 --ip 192.168.100.11 --name ipvcont11 ubuntu
+                       
+                       
+          - creating new containers inside the network  
+                       sudo docker run -itd --rm --network netwkipvlan2 --ip 192.168.90.7 --name ipvcont21 ubuntu
+                       sudo docker run -itd --rm --network netwkipvlan2 --ip 192.168.90.8 --name ipvcont12 ubuntu
+                       
+                       sudo docker inspect (enter either of the networks to view thedeployed containers in the network and their assigned ips)
+        
+          - Assumptions:
+                - assume there are two networks(you can create a network by now) netwkipvln1(has two containers ipvcont11 and ipvcont12) anda second netwrok netwrkipvln2 (wit two containers ipvcint21 and ipvcont22)  created using above commands
+                - netwkipvln1 has ip 192.168.100.0/24 and netwkipvln2 has ip 192.168.90.0/24
+                - as it stands, the home network cannot reach these networks once they are deployed
+                - the container connections to the internet is also isolated and they can only communicate between them selves.
+                - interesting to note in this mode:
+                    -- when separate networks share the same parent interface, they can communicate to each other
+                    -- if you want network isolation of the two, create and connect each to a separate network interface with ipvlan l3s mode
+                - to ensure that the containers have access to everything, add static routes on your router to tell your network on how to reach the container networks.
+       
+      # Network 6 - Overlay network
+     - this network is used when working with multiple hosts. the above has been demostration has been under the assumption of one host.
+     -  it is mostly used in production.
+        you can go over the documentation about it[ here](https://docs.docker.com/network/)
