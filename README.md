@@ -254,3 +254,20 @@ Docker containers basics and the network infrastructure explained
    - this network is used when working with multiple hosts. the above has been demostration has been under the assumption of one host.
    -  it is mostly used in production.
       you can go over the documentation about it[ here](https://docs.docker.com/network/)
+      
+
+   # Network 7 - None network
+    - this is the most secure network in the list (haha)
+    - this network exixts by default and doesnt need to be created
+    - the driver/network type is null
+        - creating a container in the none network
+                       
+                       sudo docker run -tds -rm --network non --name mynonecont ubuntu
+                       
+        - running the following commands to jump into the container see the configuration:
+        
+                       sudo docker exec -it mynoncont sh
+                       
+                       ip address show
+                       
+        - ip address show command returns the loopback address alone and nothing else
