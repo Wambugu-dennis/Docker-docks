@@ -5,7 +5,7 @@ Docker containers basics and the network infrastructure explained
 - While VMs virtualizes the hardware, docker virtualizes the OS.
 - so we have 
 
-       hadware --> os(eg: ubuntu, kali) --> Docker engine --> containers(which can be runnign different OS's (ubuntu, centos, debian)
+ hadware --> os(eg: ubuntu, kali) --> Docker engine --> containers(which can be runnign different OS's (ubuntu, centos, debian)
 
 
   - SETUP AND COMMANDS:
@@ -26,6 +26,7 @@ Docker containers basics and the network infrastructure explained
                         docker pull centos    
                         
 - run the container
+
                  sudo docker run -itd --name mycentoscon centos
                         
  - you can use the switch - -rm before -name to clean after use if it a lab
