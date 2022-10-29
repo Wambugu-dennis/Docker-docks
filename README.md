@@ -53,6 +53,7 @@ Docker containers basics and the network infrastructure explained
 
    - Important to note is that the bridge also assigns ip addresses meaning it  runs DHCP
   - to verify this, run an inspection on the network using
+  
                         sudo docker inspect bridge
 		      
 - this returns/lists the available containers and their respective ipv4 addresses & their macAddresses in the same docker0/host network(subnet if you like).
@@ -60,8 +61,8 @@ Docker containers basics and the network infrastructure explained
 - Remember the docker0 acts as a switch, this inturn means that the containers can communicate to each other and the internet as well
 - to verify this, jump into a container
 
-                        sudo docker exec -it mycentoscon -sh  (takes us to the centos container) 
-				        ping {ip address} (some other container in the same network)
+        sudo docker exec -it mycentoscon -sh  (takes us to the centos container) 
+        ping {ip address} (some other container in the same network)
 
      - the ping works for inter container comms and the internet
      - why it works for the internet...
@@ -125,7 +126,7 @@ Docker containers basics and the network infrastructure explained
      
                             sudo docker exec -it cont21
                             ping cont22
-					                                                            and
+					                                                        and
 					        sudo docker exec -it cont22
                             ping cont21
 				
@@ -140,7 +141,7 @@ Docker containers basics and the network infrastructure explained
     - we first define our new container and define our network 
 	- we wont expose any ports for now but we will keep the same container name webcon
 
-		                    sudo docker run -itd -rm --network host --name webcon nginx
+		            sudo docker run -itd -rm --network host --name webcon nginx
 			  
    - this now does results into a very interesting container with intersting network configuration
    - the container is now deployed and hooked to the host network directly
@@ -206,9 +207,9 @@ Docker containers basics and the network infrastructure explained
       - assuming youre on a vm (say oracal virtual box which i used for this lab) head to settings, network promiscous mode set to allow all
       - however, this might still not work on the first trial so reboot the host, repeat the step form ip link and try pinging the gateway ip from a container, that should work.
 
- - Macvlan has two modes:
-       1. Acts as a bridge network(one we just covered) except it connects to your network
-       2. Has an 802.1q mode
+    - Macvlan has two modes:
+          1. Acts as a bridge network(one we just covered) except it connects to your network
+          2. Has an 802.1q mode
 - this mode allows connecting the containers directly to your network as well as;
     - allows specifying the sub interface eg: eth0.30, etho.40 which enables docker to automatically create sub interfaces and sends the individual (vlans) over a link like a truck from the container to the sub interface created by docker.
  - creating our new macvlan with version/mode 2
@@ -259,7 +260,7 @@ Docker containers basics and the network infrastructure explained
 		             sudo docker run -itd --rm --network netwkipvlan1  \
 				    --ip 192.168.100.10 \
 				    --name ipvcont11 ubuntu
-				 				 																				and container 2
+				 				 							                	and container 2
 																				
                     sudo docker run -itd --rm --network netwkipvlan1  \
 				    --ip 192.168.100.11 \
