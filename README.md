@@ -1,5 +1,5 @@
 # Docker-networking
-Docker containers basics and the network infrastructure explained
+Docker containers basics networking explained
 
 - There are 7 different types of networks we can deploy using docker containers.
 - While VMs virtualizes the hardware, docker virtualizes the OS.
