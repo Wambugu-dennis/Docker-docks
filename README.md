@@ -26,7 +26,7 @@ Docker containers basics and the network infrastructure explained
                         docker pull centos    
                         
 - run the container
-                        sudo docker run -itd --name mycentoscon centos
+                 sudo docker run -itd --name mycentoscon centos
                         
  - you can use the switch - -rm before -name to clean after use if it a lab
 - to see if the container is running
