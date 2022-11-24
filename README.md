@@ -1,6 +1,16 @@
 # Docker-networking
 Docker containers basics networking explained
 
+- # Short introduction about docker networks
+
+In the Docker world, Network admins have a huge responsibility of understanding the network components found in virtualization platforms like Microsoft, Red Hat, etc. But, deploying a container isn’t simple; it requires strong networking skills to configure a container architecture correctly. To solve this issue, Docker Networking was introduced.
+
+# Before understanding Docker Networking, let’s quickly understand the term ‘Docker’ first.
+
+- [Docker](https://www.simplilearn.com/tutorials/docker-tutorial/what-is-docker) is a platform that utilizes OS-level virtual software, to help users to   develop, deploy, manage, and run applications in a Docker Container with all their library dependencies.
+
+- Docker networking enables a user to link a Docker container to as many networks as he/she requires. Docker Networks are used to provide complete     isolation for Docker containers.
+
 - There are 7 different types of networks we can deploy using docker containers.
 - While VMs virtualizes the hardware, docker virtualizes the OS.
 - so we have 
