@@ -13,6 +13,8 @@ In the Docker world, Network admins have a huge responsibility of understanding 
 
 - There are 7 different types of networks we can deploy using docker containers.
 - While VMs virtualizes the hardware, docker virtualizes the OS.
+- ![image](https://user-images.githubusercontent.com/49392080/203761639-1ceb3808-219c-4b2c-9e74-d79c6c3635ea.png)
+
 - so we have 
 
  hadware --> os(eg: ubuntu, kali) --> Docker engine --> containers(which can be runnign different OS's (ubuntu, centos, debian)
